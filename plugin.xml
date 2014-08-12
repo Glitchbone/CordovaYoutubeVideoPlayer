@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<plugin xmlns="http://cordova.apache.org/ns/plugins/1.0"
+    id="com.bunkerpalace.cordova.YoutubeVideoPlayer"
+    version="1.0.0">
+
+    <name>CordovaYoutubeVideoPlayer</name>
+
+	<description>Youtube Video Player Plugin</description>
+	
+	<author>Adrien Glitchbone - Bunker Palace SA</author>
+	
+	<keywords>video,youtube,videoplayer</keywords>
+
+	<engines>
+	    <engine name="cordova" version=">=3.0.0" />
+	</engines>
+	
+	<js-module src="www/YoutubeVideoPlayer.js" name="YoutubeVideoPlayer">
+        <clobbers target="YoutubeVideoPlayer" />
+    </js-module>
+	
+	<platform name="android">
+		
+		<config-file target="res/xml/config.xml" parent="widget">
+			<feature name="YoutubeVideoPlayer">
+				<param name="android-package" value="com.bunkerpalace.cordova.YoutubeVideoPlayer" />
+			</feature>
+        </config-file>
+
+		<config-file target="AndroidManifest.xml" parent="/manifest">
+			<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+		</config-file>
+
+		<config-file target="AndroidManifest.xml" parent="/manifest/application">
+			<activity android:name="com.keyes.youtube.OpenYouTubePlayerActivity" android:screenOrientation="landscape" />
+		</config-file>
+
+		<source-file src="src/android/com/bunkerpalace/cordova/YoutubeVideoPlayer.java" target-dir="src/com/bunkerpalace/cordova"/>
+		<source-file src="src/android/libs/openyoutubeactivity.jar" target-dir="libs"/>
+		
+	</platform>
+
+    <platform name="ios">
+	
+        <config-file target="config.xml" parent="/*">
+			<feature name="YoutubeVideoPlayer">
+				<param name="ios-package" value="YoutubeVideoPlayer" />
+			</feature>
+        </config-file>
+
+        <header-file src="src/ios/YoutubeVideoPlayer.h" />
+		<source-file src="src/ios/YoutubeVideoPlayer.m" />
+		
+		<header-file src="src/ios/XCDYouTubeVideoPlayerViewController.h" />
+		<source-file src="src/ios/XCDYouTubeVideoPlayerViewController.m" />
+
+		<framework src="MediaPlayer.framework" />
+		<framework src="AVFoundation.framework" />
+	
+    </platform>
+
+</plugin>
