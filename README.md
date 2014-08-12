@@ -15,11 +15,13 @@ cordova plugin add https://github.com/Glitchbone/CordovaYoutubeVideoPlayer.git
 
 #Usage
 
+```javascript
 YoutubeVideoPlayer.openVideo('YOUTUBE_VIDEO_ID');
+```
 
 ## Authors
 
 **[Adrien Glitchbone](http://github.com/Glitchbone)**
 
-+ [https://twitter.com/AdrienROOTabaga](https://twitter.com/glitchbone)
++ [https://twitter.com/glitchbone](https://twitter.com/glitchbone)
 + [http://github.com/Glitchbone](http://github.com/Glitchbone)
