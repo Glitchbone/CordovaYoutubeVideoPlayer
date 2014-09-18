@@ -16,7 +16,7 @@
 	    <engine name="cordova" version=">=3.0.0" />
 	</engines>
 	
-	<js-module src="www/YoutubeVideoPlayer.js" name="YoutubeVideoPlayer">
+	<js-module src="plugins/com.bunkerpalace.cordova.YoutubeVideoPlayer/www/YoutubeVideoPlayer.js" name="YoutubeVideoPlayer">
         <clobbers target="YoutubeVideoPlayer" />
     </js-module>
 	
@@ -36,8 +36,8 @@
 			<activity android:name="com.keyes.youtube.OpenYouTubePlayerActivity" android:screenOrientation="landscape" />
 		</config-file>
 
-		<source-file src="src/android/com/bunkerpalace/cordova/YoutubeVideoPlayer.java" target-dir="src/com/bunkerpalace/cordova"/>
-		<source-file src="src/android/libs/openyoutubeactivity.jar" target-dir="libs"/>
+		<source-file src="platforms/android/src/com/bunkerpalace/cordova/YoutubeVideoPlayer.java" target-dir="src/com/bunkerpalace/cordova"/>
+		<source-file src="platforms/android/libs/openyoutubeactivity.jar" target-dir="libs"/>
 		
 	</platform>
 
@@ -49,11 +49,11 @@
 			</feature>
         </config-file>
 
-        <header-file src="src/ios/YoutubeVideoPlayer.h" />
-		<source-file src="src/ios/YoutubeVideoPlayer.m" />
+        <header-file src="platforms/ios/YoutubeVideoPlayerProject/Plugins/com.bunkerpalace.cordova.YoutubeVideoPlayer/YoutubeVideoPlayer.h" />
+		<source-file src="platforms/ios/YoutubeVideoPlayerProject/Plugins/com.bunkerpalace.cordova.YoutubeVideoPlayer/YoutubeVideoPlayer.m" />
 		
-		<header-file src="src/ios/XCDYouTubeVideoPlayerViewController.h" />
-		<source-file src="src/ios/XCDYouTubeVideoPlayerViewController.m" />
+		<header-file src="platforms/ios/YoutubeVideoPlayerProject/Plugins/com.bunkerpalace.cordova.YoutubeVideoPlayer/XCDYouTubeVideoPlayerViewController.h" />
+		<source-file src="platforms/ios/YoutubeVideoPlayerProject/Plugins/com.bunkerpalace.cordova.YoutubeVideoPlayer/XCDYouTubeVideoPlayerViewController.m" />
 
 		<framework src="MediaPlayer.framework" />
 		<framework src="AVFoundation.framework" />
