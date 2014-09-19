@@ -2,7 +2,8 @@
 
 **Play Youtube Videos in a native Video Player on Android &amp; iOS.**
 
-iOS plugin is based on **XCDYouTubeVideoPlayerViewController** (project no longer active)
+iOS plugin is based on **XCDYouTubeKit**:  
+https://github.com/0xced/XCDYouTubeKit
 
 Android version is based on **OpenYoutubeActivity**:  
 https://code.google.com/p/android-youtube-player/

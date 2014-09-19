@@ -1,6 +1,5 @@
 //
-//  BKPARView.h
-//  ForestCC
+//  YoutubeVideoPlayer.h
 //
 //  Created by Adrien Girbone on 15/04/2014.
 //

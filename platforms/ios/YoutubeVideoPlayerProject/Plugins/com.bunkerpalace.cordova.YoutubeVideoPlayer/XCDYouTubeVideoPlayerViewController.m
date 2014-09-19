@@ -1,18 +1,14 @@
 //
-//  XCDYouTubeVideoPlayerViewController.m
-//  XCDYouTubeVideoPlayerViewController
-//
-//  Created by Cédric Luthi on 02.05.13.
-//  Copyright (c) 2013 Cédric Luthi. All rights reserved.
+//  Copyright (c) 2013-2014 Cédric Luthi. All rights reserved.
 //
 
 #import "XCDYouTubeVideoPlayerViewController.h"
 
-#import <AVFoundation/AVFoundation.h>
+#import "XCDYouTubeClient.h"
+
 #import <objc/runtime.h>
 
-NSString *const XCDYouTubeVideoErrorDomain = @"XCDYouTubeVideoErrorDomain";
-NSString *const XCDMoviePlayerPlaybackDidFinishErrorUserInfoKey = @"XCDMoviePlayerPlaybackDidFinishErrorUserInfoKey";
+NSString *const XCDMoviePlayerPlaybackDidFinishErrorUserInfoKey = @"error"; // documented in -[MPMoviePlayerController initWithContentURL:]
 
 NSString *const XCDYouTubeVideoPlayerViewControllerDidReceiveMetadataNotification = @"XCDYouTubeVideoPlayerViewControllerDidReceiveMetadataNotification";
 NSString *const XCDMetadataKeyTitle = @"Title";
@@ -20,116 +16,114 @@ NSString *const XCDMetadataKeySmallThumbnailURL = @"SmallThumbnailURL";
 NSString *const XCDMetadataKeyMediumThumbnailURL = @"MediumThumbnailURL";
 NSString *const XCDMetadataKeyLargeThumbnailURL = @"LargeThumbnailURL";
 
-static NSDictionary *DictionaryWithQueryString(NSString *string, NSStringEncoding encoding)
-{
-	NSMutableDictionary *dictionary = [NSMutableDictionary new];
-	NSArray *fields = [string componentsSeparatedByString:@"&"];
-	for (NSString *field in fields)
-	{
-		NSArray *pair = [field componentsSeparatedByString:@"="];
-		if (pair.count == 2)
-		{
-			NSString *key = pair[0];
-			NSString *value = [pair[1] stringByReplacingPercentEscapesUsingEncoding:encoding];
-			value = [value stringByReplacingOccurrencesOfString:@"+" withString:@" "];
-			dictionary[key] = value;
-		}
-	}
-	return dictionary;
-}
-
-static NSString *ApplicationLanguageIdentifier(void)
-{
-	static NSString *applicationLanguageIdentifier;
-	static dispatch_once_t onceToken;
-	dispatch_once(&onceToken, ^{
-		applicationLanguageIdentifier = @"en";
-		NSArray *preferredLocalizations = [[NSBundle mainBundle] preferredLocalizations];
-		if (preferredLocalizations.count > 0)
-			applicationLanguageIdentifier = [NSLocale canonicalLanguageIdentifierFromString:preferredLocalizations[0]] ?: applicationLanguageIdentifier;
-	});
-	return applicationLanguageIdentifier;
-}
+NSString *const XCDYouTubeVideoPlayerViewControllerDidReceiveVideoNotification = @"XCDYouTubeVideoPlayerViewControllerDidReceiveVideoNotification";
+NSString *const XCDYouTubeVideoUserInfoKey = @"Video";
 
 @interface XCDYouTubeVideoPlayerViewController ()
-@property (nonatomic, strong) NSURLConnection *connection;
-@property (nonatomic, strong) NSMutableData *connectionData;
-@property (nonatomic, strong) NSMutableArray *elFields;
+@property (nonatomic, weak) id<XCDYouTubeOperation> videoOperation;
 @property (nonatomic, assign, getter = isEmbedded) BOOL embedded;
-@property (nonatomic, assign) BOOL statusBarHidden;
-@property (nonatomic, assign) UIStatusBarStyle statusBarStyle;
 @end
 
 @implementation XCDYouTubeVideoPlayerViewController
 
-static void *XCDYouTubeVideoPlayerViewControllerKey = &XCDYouTubeVideoPlayerViewControllerKey;
+/*
+ * MPMoviePlayerViewController on iOS 7 and earlier
+ * - (id) init
+ *        `-- [super init]
+ *
+ * - (id) initWithContentURL:(NSURL *)contentURL
+ *        |-- [self init]
+ *        `-- [self.moviePlayer setContentURL:contentURL]
+ *
+ * MPMoviePlayerViewController on iOS 8 and later
+ * - (id) init
+ *        `-- [self initWithContentURL:nil]
+ *
+ * - (id) initWithContentURL:(NSURL *)contentURL
+ *        |-- [super init]
+ *        `-- [self.moviePlayer setContentURL:contentURL]
+ */
 
-- (id) init
+- (instancetype) init
 {
 	return [self initWithVideoIdentifier:nil];
 }
 
-- (id) initWithContentURL:(NSURL *)contentURL
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wobjc-designated-initializers"
+- (instancetype) initWithContentURL:(NSURL *)contentURL
 {
 	@throw [NSException exceptionWithName:NSGenericException reason:@"Use the `initWithVideoIdentifier:` method instead." userInfo:nil];
 }
 
-- (id) initWithVideoIdentifier:(NSString *)videoIdentifier
+- (instancetype) initWithVideoIdentifier:(NSString *)videoIdentifier
 {
-	if (!(self = [super init]))
+	if ([[[UIDevice currentDevice] systemVersion] integerValue] >= 8)
+		self = [super initWithContentURL:nil];
+	else
+		self = [super init];
+	
+	if (!self)
 		return nil;
 	
-	self.preferredVideoQualities = nil;
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidEnterBackgroundNotification object:nil];
 	
 	if (videoIdentifier)
 		self.videoIdentifier = videoIdentifier;
 	
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(moviePlayerWillEnterFullscreen:) name:MPMoviePlayerWillEnterFullscreenNotification object:self.moviePlayer];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(moviePlayerWillExitFullscreen:) name:MPMoviePlayerWillExitFullscreenNotification object:self.moviePlayer];
-	
 	return self;
 }
+#pragma clang diagnostic pop
 
-- (void) dealloc
+#pragma mark - Public
+
+- (NSArray *) preferredVideoQualities
 {
-	[[NSNotificationCenter defaultCenter] removeObserver:self];
+	if (!_preferredVideoQualities)
+		_preferredVideoQualities = @[ XCDYouTubeVideoQualityHTTPLiveStreaming, @(XCDYouTubeVideoQualityHD720), @(XCDYouTubeVideoQualityMedium360), @(XCDYouTubeVideoQualitySmall240) ];
+	
+	return _preferredVideoQualities;
 }
 
 - (void) setVideoIdentifier:(NSString *)videoIdentifier
 {
-	if (![NSThread isMainThread])
-	{
-		[self performSelectorOnMainThread:_cmd withObject:videoIdentifier waitUntilDone:NO];
-		return;
-	}
-	
 	if ([videoIdentifier isEqual:self.videoIdentifier])
 		return;
 	
 	_videoIdentifier = [videoIdentifier copy];
 	
-	self.elFields = [[NSMutableArray alloc] initWithArray:@[ @"embedded", @"detailpage", @"vevo", @"" ]];
-	
-	[self startVideoInfoRequest];
-}
-
-- (void) setPreferredVideoQualities:(NSArray *)preferredVideoQualities
-{
-	if (preferredVideoQualities)
-	{
-		_preferredVideoQualities = [preferredVideoQualities copy];
-	}
-	else
-	{
-		if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone)
-			_preferredVideoQualities = @[ @(XCDYouTubeVideoQualityHD720), @(XCDYouTubeVideoQualityMedium360), @(XCDYouTubeVideoQualitySmall240) ];
+	[self.videoOperation cancel];
+	self.videoOperation = [[XCDYouTubeClient defaultClient] getVideoWithIdentifier:videoIdentifier completionHandler:^(XCDYouTubeVideo *video, NSError *error) {
+		if (video)
+		{
+			NSURL *streamURL = nil;
+			for (NSNumber *videoQuality in self.preferredVideoQualities)
+			{
+				streamURL = video.streamURLs[videoQuality];
+				if (streamURL)
+				{
+					[self startVideo:video streamURL:streamURL];
+					break;
+				}
+			}
+			
+			if (!streamURL)
+			{
+				NSError *noStreamError = [NSError errorWithDomain:XCDYouTubeVideoErrorDomain code:XCDYouTubeErrorNoStreamAvailable userInfo:nil];
+				[self stopWithError:noStreamError];
+			}
+		}
 		else
-			_preferredVideoQualities = @[ @(XCDYouTubeVideoQualityHD1080), @(XCDYouTubeVideoQualityHD720), @(XCDYouTubeVideoQualityMedium360), @(XCDYouTubeVideoQualitySmall240) ];
-	}
+		{
+			[self stopWithError:error];
+		}
+	}];
 }
 
 - (void) presentInView:(UIView *)view
 {
+	static void *XCDYouTubeVideoPlayerViewControllerKey = &XCDYouTubeVideoPlayerViewControllerKey;
+	
 	self.embedded = YES;
 	
 	self.moviePlayer.controlStyle = MPMovieControlStyleEmbedded;
@@ -140,21 +134,31 @@ static void *XCDYouTubeVideoPlayerViewControllerKey = &XCDYouTubeVideoPlayerView
 	objc_setAssociatedObject(view, XCDYouTubeVideoPlayerViewControllerKey, self, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
-- (void) startVideoInfoRequest
+#pragma mark - Private
+
+- (void) startVideo:(XCDYouTubeVideo *)video streamURL:(NSURL *)streamURL
 {
-	NSString *elField = [self.elFields objectAtIndex:0];
-	[self.elFields removeObjectAtIndex:0];
-	if (elField.length > 0)
-		elField = [@"&el=" stringByAppendingString:elField];
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+	NSMutableDictionary *userInfo = [NSMutableDictionary new];
+	if (video.title)
+		userInfo[XCDMetadataKeyTitle] = video.title;
+	if (video.smallThumbnailURL)
+		userInfo[XCDMetadataKeySmallThumbnailURL] = video.smallThumbnailURL;
+	if (video.mediumThumbnailURL)
+		userInfo[XCDMetadataKeyMediumThumbnailURL] = video.mediumThumbnailURL;
+	if (video.largeThumbnailURL)
+		userInfo[XCDMetadataKeyLargeThumbnailURL] = video.largeThumbnailURL;
 	
-	NSURL *videoInfoURL = [NSURL URLWithString:[NSString stringWithFormat:@"https://www.youtube.com/get_video_info?video_id=%@%@&ps=default&eurl=&gl=US&hl=%@", self.videoIdentifier ?: @"", elField, ApplicationLanguageIdentifier()]];
-	NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:videoInfoURL cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:10];
-	[request setValue:ApplicationLanguageIdentifier() forHTTPHeaderField:@"Accept-Language"];
-	[self.connection cancel];
-	self.connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
+	[[NSNotificationCenter defaultCenter] postNotificationName:XCDYouTubeVideoPlayerViewControllerDidReceiveMetadataNotification object:self userInfo:userInfo];
+#pragma clang diagnostic pop
+	
+	[[NSNotificationCenter defaultCenter] postNotificationName:XCDYouTubeVideoPlayerViewControllerDidReceiveVideoNotification object:self userInfo:@{ XCDYouTubeVideoUserInfoKey: video }];
+	
+	self.moviePlayer.contentURL = streamURL;
 }
 
-- (void) finishWithError:(NSError *)error
+- (void) stopWithError:(NSError *)error
 {
 	NSDictionary *userInfo = @{ MPMoviePlayerPlaybackDidFinishReasonUserInfoKey: @(MPMovieFinishReasonPlaybackError),
 	                            XCDMoviePlayerPlaybackDidFinishErrorUserInfoKey: error };
@@ -186,126 +190,7 @@ static void *XCDYouTubeVideoPlayerViewControllerKey = &XCDYouTubeVideoPlayerView
 	if (![self isBeingDismissed])
 		return;
 	
-	[self.connection cancel];
-}
-
-#pragma mark - NSURLConnectionDataDelegate / NSURLConnectionDelegate
-
-- (void) connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
-{
-	NSUInteger capacity = response.expectedContentLength == NSURLResponseUnknownLength ? 0 : (NSUInteger)response.expectedContentLength;
-	self.connectionData = [[NSMutableData alloc] initWithCapacity:capacity];
-}
-
-- (void) connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
-{
-	[self.connectionData appendData:data];
-}
-
-- (void) connectionDidFinishLoading:(NSURLConnection *)connection
-{
-	NSError *error = nil;
-	NSURL *videoURL = [self videoURLWithData:self.connectionData error:&error];
-	if (videoURL)
-		self.moviePlayer.contentURL = videoURL;
-	else if (self.elFields.count > 0)
-		[self startVideoInfoRequest];
-	else
-		[self finishWithError:error];
-}
-
-- (void) connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
-{
-	[self finishWithError:error];
-}
-
-#pragma mark - Notifications
-
-- (void) moviePlayerWillEnterFullscreen:(NSNotification *)notification
-{
-	UIApplication *application = [UIApplication sharedApplication];
-	self.statusBarHidden = application.statusBarHidden;
-	self.statusBarStyle = application.statusBarStyle;
-}
-
-- (void) moviePlayerWillExitFullscreen:(NSNotification *)notification
-{
-	UIApplication *application = [UIApplication sharedApplication];
-	[application setStatusBarHidden:self.statusBarHidden withAnimation:UIStatusBarAnimationFade];
-	[application setStatusBarStyle:self.statusBarStyle animated:YES];
-}
-
-#pragma mark - URL Parsing
-
-- (NSURL *) videoURLWithData:(NSData *)data error:(NSError * __autoreleasing *)error
-{
-	NSString *videoQuery = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
-	NSStringEncoding queryEncoding = NSUTF8StringEncoding;
-	NSDictionary *video = DictionaryWithQueryString(videoQuery, queryEncoding);
-	NSMutableArray *streamQueries = [[video[@"url_encoded_fmt_stream_map"] componentsSeparatedByString:@","] mutableCopy];
-	[streamQueries addObjectsFromArray:[video[@"adaptive_fmts"] componentsSeparatedByString:@","]];
-	
-	NSMutableDictionary *streamURLs = [NSMutableDictionary new];
-	for (NSString *streamQuery in streamQueries)
-	{
-		NSDictionary *stream = DictionaryWithQueryString(streamQuery, queryEncoding);
-		NSString *type = stream[@"type"];
-		NSString *urlString = stream[@"url"];
-		if (urlString && [AVURLAsset isPlayableExtendedMIMEType:type])
-		{
-			NSURL *streamURL = [NSURL URLWithString:urlString];
-			NSString *signature = stream[@"sig"];
-			if (signature)
-				streamURL = [NSURL URLWithString:[NSString stringWithFormat:@"%@&signature=%@", urlString, signature]];
-			
-			if ([[DictionaryWithQueryString(streamURL.query, queryEncoding) allKeys] containsObject:@"signature"])
-				streamURLs[@([stream[@"itag"] integerValue])] = streamURL;
-		}
-	}
-	
-	for (NSNumber *videoQuality in self.preferredVideoQualities)
-	{
-		NSURL *streamURL = streamURLs[videoQuality];
-		if (streamURL)
-		{
-			NSString *title = video[@"title"];
-			NSString *thumbnailSmall = video[@"thumbnail_url"];
-			NSString *thumbnailMedium = video[@"iurlsd"];
-			NSString *thumbnailLarge = video[@"iurlmaxres"];
-			NSMutableDictionary *userInfo = [NSMutableDictionary new];
-			if (title)
-				userInfo[XCDMetadataKeyTitle] = title;
-			if (thumbnailSmall)
-				userInfo[XCDMetadataKeySmallThumbnailURL] = [NSURL URLWithString:thumbnailSmall];
-			if (thumbnailMedium)
-				userInfo[XCDMetadataKeyMediumThumbnailURL] = [NSURL URLWithString:thumbnailMedium];
-			if (thumbnailLarge)
-				userInfo[XCDMetadataKeyLargeThumbnailURL] = [NSURL URLWithString:thumbnailLarge];
-			
-			[[NSNotificationCenter defaultCenter] postNotificationName:XCDYouTubeVideoPlayerViewControllerDidReceiveMetadataNotification object:self userInfo:userInfo];
-			return streamURL;
-		}
-	}
-	
-	if (error)
-	{
-		NSMutableDictionary *userInfo = [@{ NSURLErrorKey: self.connection.originalRequest.URL } mutableCopy];
-		NSString *reason = video[@"reason"];
-		if (reason)
-		{
-			reason = [reason stringByReplacingOccurrencesOfString:@"<br\\s*/?>" withString:@" " options:NSRegularExpressionSearch range:NSMakeRange(0, reason.length)];
-			NSRange range;
-			while ((range = [reason rangeOfString:@"<[^>]+>" options:NSRegularExpressionSearch]).location != NSNotFound)
-				reason = [reason stringByReplacingCharactersInRange:range withString:@""];
-			
-			userInfo[NSLocalizedDescriptionKey] = reason;
-		}
-		
-		NSInteger code = [video[@"errorcode"] integerValue];
-		*error = [NSError errorWithDomain:XCDYouTubeVideoErrorDomain code:code userInfo:userInfo];
-	}
-	
-	return nil;
+	[self.videoOperation cancel];
 }
 
 @end

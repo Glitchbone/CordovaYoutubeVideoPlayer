@@ -1,13 +1,12 @@
 //
-//  BKPARView.m
-//  ForestCC
+//  YoutubeVideoPlayer.m
 //
 //  Created by Adrien Girbone on 15/04/2014.
 //
 //
 
 #import "YoutubeVideoPlayer.h"
-#import "XCDYouTubeVideoPlayerViewController.h"
+#import "XCDYouTubeKit.h"
 
 @implementation YoutubeVideoPlayer
 
