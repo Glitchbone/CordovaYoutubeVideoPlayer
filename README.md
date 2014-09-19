@@ -2,11 +2,11 @@
 
 **Play Youtube Videos in a native Video Player on Android &amp; iOS.**
 
-iOS plugin is based on **XCDYouTubeKit**:  
+iOS plugin uses **XCDYouTubeKit** by Cédric Luthi:  
 https://github.com/0xced/XCDYouTubeKit
 
-Android version is based on **OpenYoutubeActivity**:  
-https://code.google.com/p/android-youtube-player/
+Android version uses **OpenYoutubeActivity** by Keyes Labs:  
+https://code.google.com/p/android-youtube-player
 
 ##Installation
 
@@ -20,9 +20,15 @@ cordova plugin add https://github.com/Glitchbone/CordovaYoutubeVideoPlayer.git
 YoutubeVideoPlayer.openVideo('YOUTUBE_VIDEO_ID');
 ```
 
-##Authors
+##Author
 
-**[Adrien Glitchbone](http://github.com/Glitchbone)**
+**Adrien Glitchbone**
 
 + [https://twitter.com/glitchbone](https://twitter.com/glitchbone)
 + [http://github.com/Glitchbone](http://github.com/Glitchbone)
+
+##License
+
+CordovaYoutubeVideoPlayer is available under the MIT license. See the [LICENSE](LICENSE) file for more information.  
+XCDYouTubeKit is available under the MIT license.  
+OpenYoutubeActivity is available under the Apache License 2.0.  
