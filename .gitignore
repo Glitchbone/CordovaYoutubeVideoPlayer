@@ -47,3 +47,5 @@ local.properties
 # TeXlipse plugin
 .texlipse
 .classpath
+gen/
+.project
