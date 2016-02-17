@@ -5,13 +5,16 @@
 iOS plugin uses **XCDYouTubeKit** by Cédric Luthi:  
 https://github.com/0xced/XCDYouTubeKit
 
-Android version uses **OpenYoutubeActivity** by Keyes Labs:  
+Android version (up to 4.4) uses **OpenYoutubeActivity** by Keyes Labs:  
 https://code.google.com/p/android-youtube-player
+
+Android version (5.0+) uses YouTube Android Player API:
+https://developers.google.com/youtube/android/player/reference/com/google/android/youtube/player/YouTubePlayer
 
 ##Installation
 
 ```sh
-cordova plugin add https://github.com/Glitchbone/CordovaYoutubeVideoPlayer.git
+cordova plugin add https://github.com/arctouch/cordova-youtube-player
 ```
 
 ##Usage
