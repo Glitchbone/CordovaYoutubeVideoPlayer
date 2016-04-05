@@ -20,6 +20,8 @@
     if (videoID != nil) {
         
         XCDYouTubeVideoPlayerViewController *videoPlayerViewController = [[XCDYouTubeVideoPlayerViewController alloc] initWithVideoIdentifier:videoID];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(moviePlayerPlaybackDidFinish:) name:MPMoviePlayerPlaybackDidFinishNotification object:videoPlayerViewController.moviePlayer];
+        
         [self.viewController presentMoviePlayerViewControllerAnimated:videoPlayerViewController];
         
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
