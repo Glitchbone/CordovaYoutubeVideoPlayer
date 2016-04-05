@@ -1,81 +1,85 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<plugin xmlns="http://cordova.apache.org/ns/plugins/1.0"
-    id="com.bunkerpalace.cordova.YoutubeVideoPlayer"
-    version="1.0.1">
+<plugin xmlns="http://cordova.apache.org/ns/plugins/1.0" id="com.bunkerpalace.cordova.YoutubeVideoPlayer" version="1.0.1">
 
     <name>CordovaYoutubeVideoPlayer</name>
 
-	<description>Play Youtube Videos in a native Video Player on Android &amp; iOS.</description>
+    <description>Play Youtube Videos in a native Video Player on Android &amp; iOS.</description>
 
-	<author>Adrien Glitchbone - Bunker Palace SA</author>
+    <author>Adrien Glitchbone - Bunker Palace SA</author>
 
-	<keywords>video,youtube,videoplayer</keywords>
+    <keywords>video,youtube,videoplayer</keywords>
 
-	<engines>
-	    <engine name="cordova" version=">=3.0.0" />
-	</engines>
+    <engines>
+        <engine name="cordova" version=">=3.0.0" />
+        </engines>
 
-	<js-module src="plugins/com.bunkerpalace.cordova.YoutubeVideoPlayer/www/YoutubeVideoPlayer.js" name="YoutubeVideoPlayer">
-        <clobbers target="YoutubeVideoPlayer" />
-    </js-module>
+        <js-module src="plugins/com.bunkerpalace.cordova.YoutubeVideoPlayer/www/YoutubeVideoPlayer.js" name="YoutubeVideoPlayer">
+            <clobbers target="YoutubeVideoPlayer"/>
+        </js-module>
 
-	<platform name="android">
+        <platform name="android">
 
-		<config-file target="res/xml/config.xml" parent="widget">
-			<feature name="YoutubeVideoPlayer">
-				<param name="android-package" value="com.bunkerpalace.cordova.YoutubeVideoPlayer" />
-			</feature>
-        </config-file>
+            <config-file target="res/xml/config.xml" parent="widget">
+                <feature name="YoutubeVideoPlayer">
+                    <param name="android-package" value="com.bunkerpalace.cordova.YoutubeVideoPlayer"/>
+                </feature>
+            </config-file>
 
-		<config-file target="AndroidManifest.xml" parent="/manifest">
-			<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-		</config-file>
+            <config-file target="AndroidManifest.xml" parent="/manifest">
+                <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+            </config-file>
 
-		<config-file target="AndroidManifest.xml" parent="/manifest/application">
-			<activity android:name="com.keyes.youtube.OpenYouTubePlayerActivity" android:screenOrientation="landscape" />
-      <activity android:name="com.bunkerpalace.cordova.YouTubeActivity" android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale" android:label="@string/activity_name" android:launchMode="singleTop"  android:theme="@android:style/Theme.Black.NoTitleBar" android:windowSoftInputMode="adjustResize"/>
-		</config-file>
+            <config-file target="AndroidManifest.xml" parent="/manifest/application">
+                <activity android:name="com.keyes.youtube.OpenYouTubePlayerActivity" android:screenOrientation="landscape"/>
+                <activity
+                    android:name="com.bunkerpalace.cordova.YouTubeActivity"
+                    android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale"
+                    android:label="@string/activity_name"
+                    android:launchMode="singleTop"
+                    android:theme="@android:style/Theme.Black.NoTitleBar"
+                    android:windowSoftInputMode="adjustResize"/>
+            </config-file>
 
-		<source-file src="platforms/android/src/com/bunkerpalace/cordova/Config.java" target-dir="src/com/bunkerpalace/cordova"/>
-    <source-file src="platforms/android/src/com/bunkerpalace/cordova/YouTubeActivity.java" target-dir="src/com/bunkerpalace/cordova"/>
-    <source-file src="platforms/android/src/com/bunkerpalace/cordova/YoutubeVideoPlayer.java" target-dir="src/com/bunkerpalace/cordova"/>
-    <source-file src="platforms/android/libs/openyoutubeactivity.jar" target-dir="libs"/>
-    <source-file src="platforms/android/libs/YouTubeAndroidPlayerApi.jar" target-dir="libs"/>
+            <source-file src="platforms/android/src/com/bunkerpalace/cordova/Config.java" target-dir="src/com/bunkerpalace/cordova"/>
+            <source-file src="platforms/android/src/com/bunkerpalace/cordova/YouTubeActivity.java" target-dir="src/com/bunkerpalace/cordova"/>
+            <source-file src="platforms/android/src/com/bunkerpalace/cordova/YoutubeVideoPlayer.java" target-dir="src/com/bunkerpalace/cordova"/>
+            <source-file src="platforms/android/libs/openyoutubeactivity.jar" target-dir="libs"/>
+            <source-file src="platforms/android/libs/YouTubeAndroidPlayerApi.jar" target-dir="libs"/>
 
-	</platform>
+        </platform>
 
-    <platform name="ios">
+        <platform name="ios">
 
-        <config-file target="config.xml" parent="/*">
-			<feature name="YoutubeVideoPlayer">
-				<param name="ios-package" value="YoutubeVideoPlayer" />
-			</feature>
-        </config-file>
+            <config-file target="config.xml" parent="/*">
+                <feature name="YoutubeVideoPlayer">
+                    <param name="ios-package" value="YoutubeVideoPlayer"/>
+                </feature>
+            </config-file>
 
-        <header-file src="platforms/ios/YoutubeVideoPlayerProject/Plugins/com.bunkerpalace.cordova.YoutubeVideoPlayer/XCDYouTubeClient.h" />
-        <source-file src="platforms/ios/YoutubeVideoPlayerProject/Plugins/com.bunkerpalace.cordova.YoutubeVideoPlayer/XCDYouTubeClient.m" />
-        <header-file src="platforms/ios/YoutubeVideoPlayerProject/Plugins/com.bunkerpalace.cordova.YoutubeVideoPlayer/XCDYouTubeError.h" />
-        <header-file src="platforms/ios/YoutubeVideoPlayerProject/Plugins/com.bunkerpalace.cordova.YoutubeVideoPlayer/XCDYouTubeKit.h" />
-        <header-file src="platforms/ios/YoutubeVideoPlayerProject/Plugins/com.bunkerpalace.cordova.YoutubeVideoPlayer/XCDYouTubeOperation.h" />
-        <header-file src="platforms/ios/YoutubeVideoPlayerProject/Plugins/com.bunkerpalace.cordova.YoutubeVideoPlayer/XCDYouTubePlayerScript.h" />
-        <source-file src="platforms/ios/YoutubeVideoPlayerProject/Plugins/com.bunkerpalace.cordova.YoutubeVideoPlayer/XCDYouTubePlayerScript.m" />
-        <header-file src="platforms/ios/YoutubeVideoPlayerProject/Plugins/com.bunkerpalace.cordova.YoutubeVideoPlayer/XCDYouTubeVideo.h" />
-        <source-file src="platforms/ios/YoutubeVideoPlayerProject/Plugins/com.bunkerpalace.cordova.YoutubeVideoPlayer/XCDYouTubeVideo.m" />
-        <header-file src="platforms/ios/YoutubeVideoPlayerProject/Plugins/com.bunkerpalace.cordova.YoutubeVideoPlayer/XCDYouTubeVideo+Private.h" />
-        <header-file src="platforms/ios/YoutubeVideoPlayerProject/Plugins/com.bunkerpalace.cordova.YoutubeVideoPlayer/XCDYouTubeVideoOperation.h" />
-        <source-file src="platforms/ios/YoutubeVideoPlayerProject/Plugins/com.bunkerpalace.cordova.YoutubeVideoPlayer/XCDYouTubeVideoOperation.m" />
-        <header-file src="platforms/ios/YoutubeVideoPlayerProject/Plugins/com.bunkerpalace.cordova.YoutubeVideoPlayer/XCDYouTubeVideoPlayerViewController.h" />
-        <source-file src="platforms/ios/YoutubeVideoPlayerProject/Plugins/com.bunkerpalace.cordova.YoutubeVideoPlayer/XCDYouTubeVideoPlayerViewController.m" />
-        <header-file src="platforms/ios/YoutubeVideoPlayerProject/Plugins/com.bunkerpalace.cordova.YoutubeVideoPlayer/XCDYouTubeVideoWebpage.h" />
-        <source-file src="platforms/ios/YoutubeVideoPlayerProject/Plugins/com.bunkerpalace.cordova.YoutubeVideoPlayer/XCDYouTubeVideoWebpage.m" />
-        <header-file src="platforms/ios/YoutubeVideoPlayerProject/Plugins/com.bunkerpalace.cordova.YoutubeVideoPlayer/YoutubeVideoPlayer.h" />
-        <source-file src="platforms/ios/YoutubeVideoPlayerProject/Plugins/com.bunkerpalace.cordova.YoutubeVideoPlayer/YoutubeVideoPlayer.m" />
+            <header-file src="platforms/ios/YoutubeVideoPlayerProject/Plugins/com.bunkerpalace.cordova.YoutubeVideoPlayer/XCDYouTubeClient.h"/>
+            <source-file src="platforms/ios/YoutubeVideoPlayerProject/Plugins/com.bunkerpalace.cordova.YoutubeVideoPlayer/XCDYouTubeClient.m"/>
+            <header-file src="platforms/ios/YoutubeVideoPlayerProject/Plugins/com.bunkerpalace.cordova.YoutubeVideoPlayer/XCDYouTubeError.h"/>
+            <header-file src="platforms/ios/YoutubeVideoPlayerProject/Plugins/com.bunkerpalace.cordova.YoutubeVideoPlayer/XCDYouTubeKit.h"/>
+            <header-file src="platforms/ios/YoutubeVideoPlayerProject/Plugins/com.bunkerpalace.cordova.YoutubeVideoPlayer/XCDYouTubeOperation.h"/>
+            <header-file src="platforms/ios/YoutubeVideoPlayerProject/Plugins/com.bunkerpalace.cordova.YoutubeVideoPlayer/XCDYouTubePlayerScript.h"/>
+            <source-file src="platforms/ios/YoutubeVideoPlayerProject/Plugins/com.bunkerpalace.cordova.YoutubeVideoPlayer/XCDYouTubePlayerScript.m"/>
+            <header-file src="platforms/ios/YoutubeVideoPlayerProject/Plugins/com.bunkerpalace.cordova.YoutubeVideoPlayer/XCDYouTubeVideo.h"/>
+            <source-file src="platforms/ios/YoutubeVideoPlayerProject/Plugins/com.bunkerpalace.cordova.YoutubeVideoPlayer/XCDYouTubeVideo.m"/>
+            <header-file src="platforms/ios/YoutubeVideoPlayerProject/Plugins/com.bunkerpalace.cordova.YoutubeVideoPlayer/XCDYouTubeVideo+Private.h"/>
+            <header-file src="platforms/ios/YoutubeVideoPlayerProject/Plugins/com.bunkerpalace.cordova.YoutubeVideoPlayer/XCDYouTubeVideoOperation.h"/>
+            <source-file src="platforms/ios/YoutubeVideoPlayerProject/Plugins/com.bunkerpalace.cordova.YoutubeVideoPlayer/XCDYouTubeVideoOperation.m"/>
+            <header-file src="platforms/ios/YoutubeVideoPlayerProject/Plugins/com.bunkerpalace.cordova.YoutubeVideoPlayer/XCDYouTubeVideoPlayerViewController.h"/>
+            <source-file src="platforms/ios/YoutubeVideoPlayerProject/Plugins/com.bunkerpalace.cordova.YoutubeVideoPlayer/XCDYouTubeVideoPlayerViewController.m"/>
+            <header-file src="platforms/ios/YoutubeVideoPlayerProject/Plugins/com.bunkerpalace.cordova.YoutubeVideoPlayer/XCDYouTubeVideoWebpage.h"/>
+            <source-file src="platforms/ios/YoutubeVideoPlayerProject/Plugins/com.bunkerpalace.cordova.YoutubeVideoPlayer/XCDYouTubeVideoWebpage.m"/>
+            <header-file src="platforms/ios/YoutubeVideoPlayerProject/Plugins/com.bunkerpalace.cordova.YoutubeVideoPlayer/YoutubeVideoPlayer.h"/>
+            <source-file src="platforms/ios/YoutubeVideoPlayerProject/Plugins/com.bunkerpalace.cordova.YoutubeVideoPlayer/YoutubeVideoPlayer.m"/>
 
-		<framework src="MediaPlayer.framework" />
-		<framework src="AVFoundation.framework" />
-        <framework src="JavaScriptCore.framework" />
+            <framework src="MediaPlayer.framework"/>
+            <framework src="AVFoundation.framework"/>
+            <framework src="JavaScriptCore.framework"/>
 
-    </platform>
+        </platform>
 
-</plugin>
+    </plugin>

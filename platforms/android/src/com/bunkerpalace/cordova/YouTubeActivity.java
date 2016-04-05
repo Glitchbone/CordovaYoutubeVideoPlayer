@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
 
-import com.arctouch.arewa24.R;
 import com.google.android.youtube.player.YouTubeBaseActivity;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
@@ -43,7 +42,7 @@ public class YouTubeActivity extends YouTubeBaseActivity implements YouTubePlaye
         if (errorReason.isUserRecoverableError()) {
             errorReason.getErrorDialog(this, RECOVERY_REQUEST).show();
         } else {
-            String error = String.format(getString(R.string.player_error), errorReason.toString());
+            String error = String.format("Error initializing YouTube player", errorReason.toString());
             Toast.makeText(this, error, Toast.LENGTH_LONG).show();
         }
     }
