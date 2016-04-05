@@ -9,6 +9,6 @@ var app = {
         
     },
 	playVideo: function() {
-		YoutubeVideoPlayer.openVideo('npjF032TDDQ');
+        YoutubeVideoPlayer.openVideo('npjF032TDDQ', function(result) { console.log('YoutubeVideoPlayer result = ' + result); });
 	}
 };

@@ -8,7 +8,9 @@
 #import <Cordova/CDV.h>
 #import "XCDYouTubeVideoPlayerViewController.h"
 
-@interface YoutubeVideoPlayer : CDVPlugin
+@interface YoutubeVideoPlayer : CDVPlugin {
+    NSString* _eventsCallbackId;
+}
 
 - (void)openVideo:(CDVInvokedUrlCommand*)command;
 
