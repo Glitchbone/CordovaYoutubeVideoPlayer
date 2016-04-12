@@ -9,7 +9,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.keyes.youtube.OpenYouTubePlayerActivity" android:screenOrientation="landscape" />
+        <activity android:name="com.keyes.youtube.OpenYouTubePlayerActivity" android:screenOrientation="unspecified" />
         <activity android:name="com.bunkerpalace.cordova.YouTubeActivity" android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale" android:label="@string/activity_name" android:launchMode="singleTop"  android:theme="@android:style/Theme.Black.NoTitleBar" android:windowSoftInputMode="adjustResize"/>
     </application>
     <uses-sdk android:minSdkVersion="10" android:targetSdkVersion="19" />
