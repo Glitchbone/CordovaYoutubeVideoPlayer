@@ -17,7 +17,7 @@ https://developers.google.com/youtube/android/player/reference/com/google/androi
 ##Installation
 
 ```sh
-cordova plugin add https://github.com/d0cz/CordovaYoutubeVideoPlayer
+cordova plugin add https://github.com/trakout/CordovaYoutubeVideoPlayer
 ```
 
 ##Usage
@@ -36,6 +36,9 @@ For Android 5.0+ you will need to update the YOUTUBE_API_KEY (package com.bunker
 
 + [https://twitter.com/glitchbone](https://twitter.com/glitchbone)
 + [http://github.com/Glitchbone](http://github.com/Glitchbone)
+
+**d0cz**
++ [http://github.com/d0cz](http://github.com/d0cz)
 
 ##License
 
