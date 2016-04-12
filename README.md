@@ -2,6 +2,9 @@
 
 **Play Youtube Videos in a native Video Player on Android &amp; iOS.**
 
+**This fork works on Android 6, and does not force landscape mode on Android.**
+
+
 iOS plugin uses **XCDYouTubeKit** by Cédric Luthi:  
 https://github.com/0xced/XCDYouTubeKit
 
