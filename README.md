@@ -23,7 +23,7 @@ cordova plugin add https://github.com/d0cz/CordovaYoutubeVideoPlayer
 YoutubeVideoPlayer.openVideo('YOUTUBE_VIDEO_ID');
 ```
 
-For Android 5.0+ you will need to update the YOUTUBE_API_KEY (package com.bunkerpalace.cordova.Config) with your own YouTube Key.
+For Android 5.0+ you will need to update the YOUTUBE_API_KEY **(package com.bunkerpalace.cordova.Config)** with your own YouTube Key.
 
  For more information: https://developers.google.com/youtube/v3/getting-started
 
