@@ -23,12 +23,14 @@ cordova plugin add https://github.com/JonSmart/CordovaYoutubeVideoPlayer
 ##Usage
 
 ```javascript
-YoutubeVideoPlayer.openVideo('YOUTUBE_VIDEO_ID');
+YoutubeVideoPlayer.openVideo('YOUTUBE_VIDEO_ID', function(result) { console.log('YoutubeVideoPlayer result = ' + result); });
 ```
 
 For Android 5.0+ you will need to update the YOUTUBE_API_KEY **(package com.bunkerpalace.cordova.Config)** with your own YouTube Key.
 
  For more information: https://developers.google.com/youtube/v3/getting-started
+
+The callback is called when the video window is closed.  (Work in Progress - should be working for IOS).
 
 ##Author
 
