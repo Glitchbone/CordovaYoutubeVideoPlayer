@@ -5,13 +5,16 @@
 iOS plugin uses **XCDYouTubeKit** by Cédric Luthi:  
 https://github.com/0xced/XCDYouTubeKit
 
-Android version uses **OpenYoutubeActivity** by Keyes Labs:  
+Android version (up to 4.4) uses **OpenYoutubeActivity** by Keyes Labs:  
 https://code.google.com/p/android-youtube-player
+
+Android version (5.0+) uses YouTube Android Player API:
+https://developers.google.com/youtube/android/player/reference/com/google/android/youtube/player/YouTubePlayer
 
 ##Installation
 
 ```sh
-cordova plugin add https://github.com/Glitchbone/CordovaYoutubeVideoPlayer.git
+cordova plugin add https://github.com/d0cz/CordovaYoutubeVideoPlayer
 ```
 
 ##Usage
@@ -19,6 +22,10 @@ cordova plugin add https://github.com/Glitchbone/CordovaYoutubeVideoPlayer.git
 ```javascript
 YoutubeVideoPlayer.openVideo('YOUTUBE_VIDEO_ID');
 ```
+
+For Android 5.0+ you will need to update the YOUTUBE_API_KEY **(package com.bunkerpalace.cordova.Config)** with your own YouTube Key.
+
+ For more information: https://developers.google.com/youtube/v3/getting-started
 
 ##Author
 
