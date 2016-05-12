@@ -41,7 +41,6 @@
                     android:windowSoftInputMode="adjustResize"/>
             </config-file>
 
-            <source-file src="platforms/android/src/com/bunkerpalace/cordova/Config.java" target-dir="src/com/bunkerpalace/cordova"/>
             <source-file src="platforms/android/src/com/bunkerpalace/cordova/YouTubeActivity.java" target-dir="src/com/bunkerpalace/cordova"/>
             <source-file src="platforms/android/src/com/bunkerpalace/cordova/YoutubeVideoPlayer.java" target-dir="src/com/bunkerpalace/cordova"/>
             <source-file src="platforms/android/libs/openyoutubeactivity.jar" target-dir="libs"/>
