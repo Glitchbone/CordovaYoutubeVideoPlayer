@@ -1,7 +1,9 @@
 package com.bunkerpalace.cordova;
 
 import org.apache.cordova.CallbackContext;
+import org.apache.cordova.ConfigXmlParser;
 import org.apache.cordova.CordovaPlugin;
+import org.apache.cordova.CordovaPreferences;
 import org.json.JSONArray;
 import org.json.JSONException;
 import android.content.Intent;
@@ -36,15 +38,15 @@ public class YoutubeVideoPlayer extends CordovaPlugin {
 //			intent.putExtra("videoId", videoId);
 //			return intent;
 			Intent intent;
-			Context codovaContext = cordova.getActivity();
+			Context cordovaContext = cordova.getActivity();
             //The following would be more ideal, but doesn't work!
             //if(YouTubeIntents.canResolvePlayVideoIntentWithOptions(cordovaContext)){
             //    intent = YouTubeIntents.createPlayVideoIntentWithOptions(cordovaContext, videoId, true, true);
             //} else
-			if(YouTubeIntents.canResolvePlayVideoIntent(codovaContext)) {
-				intent = YouTubeIntents.createPlayVideoIntent(codovaContext, videoId);
+			if(YouTubeIntents.canResolvePlayVideoIntent(cordovaContext)) {
+				intent = YouTubeIntents.createPlayVideoIntent(cordovaContext, videoId);
 			} else {
-				intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.youtube.com/watch?v=" + videoId), codovaContext, YouTubeActivity.class);
+				intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.youtube.com/watch?v=" + videoId), cordovaContext, YouTubeActivity.class);
 				intent.putExtra("videoId", videoId);
                 ConfigXmlParser parser = new ConfigXmlParser();
                 parser.parse(cordovaContext);
