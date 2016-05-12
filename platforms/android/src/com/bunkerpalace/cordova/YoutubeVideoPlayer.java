@@ -6,8 +6,10 @@ import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.CordovaPreferences;
 import org.json.JSONArray;
 import org.json.JSONException;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import com.google.android.youtube.player.YouTubeIntents;
 import com.keyes.youtube.OpenYouTubePlayerActivity;
 import android.os.Build;
 
