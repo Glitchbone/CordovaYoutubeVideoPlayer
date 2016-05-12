@@ -37,11 +37,20 @@ public class YoutubeVideoPlayer extends CordovaPlugin {
 //			return intent;
 			Intent intent;
 			Context codovaContext = cordova.getActivity();
+            //The following would be more ideal, but doesn't work!
+            //if(YouTubeIntents.canResolvePlayVideoIntentWithOptions(cordovaContext)){
+            //    intent = YouTubeIntents.createPlayVideoIntentWithOptions(cordovaContext, videoId, true, true);
+            //} else
 			if(YouTubeIntents.canResolvePlayVideoIntent(codovaContext)) {
 				intent = YouTubeIntents.createPlayVideoIntent(codovaContext, videoId);
 			} else {
 				intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.youtube.com/watch?v=" + videoId), codovaContext, YouTubeActivity.class);
 				intent.putExtra("videoId", videoId);
+                ConfigXmlParser parser = new ConfigXmlParser();
+                parser.parse(cordovaContext);
+                CordovaPreferences prefs = parser.getPreferences();
+
+                intent.putExtra("YouTubeApiId", prefs.getString("YouTubeDataApiKey","YOUTUBE_API_KEY"));
 			}
 			return intent;
 		}

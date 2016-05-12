@@ -26,7 +26,12 @@ cordova plugin add https://github.com/JonSmart/CordovaYoutubeVideoPlayer
 YoutubeVideoPlayer.openVideo('YOUTUBE_VIDEO_ID', function(result) { console.log('YoutubeVideoPlayer result = ' + result); });
 ```
 
-For Android 5.0+ you will need to update the YOUTUBE_API_KEY **(package com.bunkerpalace.cordova.Config)** with your own YouTube Key.
+For Android 5.0+ you will need to add the following to config.xml
+
+```xml
+<preference name="YouTubeDataApiKey" value="AIzaSyCHzTXEAb_Nj3IFTqYEQkWcotpJ-ysq2Fo" />
+```
+with your own YouTube Key.
 
  For more information: https://developers.google.com/youtube/v3/getting-started
 
