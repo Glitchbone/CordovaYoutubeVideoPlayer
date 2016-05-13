@@ -29,7 +29,7 @@ YoutubeVideoPlayer.openVideo('YOUTUBE_VIDEO_ID', function(result) { console.log(
 For Android 5.0+ you will need to add the following to config.xml
 
 ```xml
-<preference name="YouTubeDataApiKey" value="AIzaSyCHzTXEAb_Nj3IFTqYEQkWcotpJ-ysq2Fo" />
+<preference name="YouTubeDataApiKey" value="[YOUR YOUTUBE API]" />
 ```
 with your own YouTube Key.
 
