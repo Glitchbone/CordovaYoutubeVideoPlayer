@@ -14,6 +14,9 @@ https://code.google.com/p/android-youtube-player
 Android version (5.0+) uses YouTube Android Player API:
 https://developers.google.com/youtube/android/player/reference/com/google/android/youtube/player/YouTubePlayer
 
+Android with YouTube App Version 111662130 requires a workaround to resolve an App issue:
+https://code.google.com/p/gdata-issues/issues/detail?id=8244
+
 ##Installation
 
 ```sh
