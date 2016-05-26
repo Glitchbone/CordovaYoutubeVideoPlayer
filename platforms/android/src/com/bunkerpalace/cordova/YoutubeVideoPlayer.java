@@ -38,7 +38,7 @@ public class YoutubeVideoPlayer extends CordovaPlugin {
 		if (Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP){
 			Intent intent;
 			Context cordovaContext = cordova.getActivity();
-			if(YouTubeIntents.getInstalledYouTubeVersionCode(cordovaContext) >= 111662130 && YouTubeIntents.canResolvePlayVideoIntent(cordovaContext)) {
+			if(YouTubeIntents.getInstalledYouTubeVersionCode(cordovaContext) == 111662130 && YouTubeIntents.canResolvePlayVideoIntent(cordovaContext)) {
 				intent = YouTubeIntents.createPlayVideoIntent(cordovaContext, videoId);
 			} else {
 				intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.youtube.com/watch?v=" + videoId), cordovaContext, YouTubeActivity.class);
