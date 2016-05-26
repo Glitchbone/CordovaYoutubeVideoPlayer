@@ -42,13 +42,17 @@ public class YoutubeVideoPlayer extends CordovaPlugin {
 			if(version.startsWith("11.16") && YouTubeIntents.canResolvePlayVideoIntent(cordovaContext)) {
 				intent = YouTubeIntents.createPlayVideoIntent(cordovaContext, videoId);
 			} else {
-				intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.youtube.com/watch?v=" + videoId), cordovaContext, YouTubeActivity.class);
-				intent.putExtra("videoId", videoId);
-                ConfigXmlParser parser = new ConfigXmlParser();
-                parser.parse(cordovaContext);
-                CordovaPreferences prefs = parser.getPreferences();
+				if(YouTubeIntents.canResolvePlayVideoIntent(cordovaContext)){
+					intent = YouTubeIntents.createPlayVideoIntentWithOptions(cordovaContext, videoId, true, true);
+				} else {
+					intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.youtube.com/watch?v=" + videoId), cordovaContext, YouTubeActivity.class);
+					intent.putExtra("videoId", videoId);
+	                ConfigXmlParser parser = new ConfigXmlParser();
+	                parser.parse(cordovaContext);
+	                CordovaPreferences prefs = parser.getPreferences();
 
-                intent.putExtra("YouTubeApiId", prefs.getString("YouTubeDataApiKey","YOUTUBE_API_KEY"));
+	                intent.putExtra("YouTubeApiId", prefs.getString("YouTubeDataApiKey","YOUTUBE_API_KEY"));
+				}
 			}
 			return intent;
 		}
