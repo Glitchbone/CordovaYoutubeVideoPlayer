@@ -4,6 +4,7 @@ import org.apache.cordova.CallbackContext;
 import org.apache.cordova.ConfigXmlParser;
 import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.CordovaPreferences;
+import org.apache.cordova.PluginResult;
 import org.json.JSONArray;
 import org.json.JSONException;
 import android.content.Context;
@@ -12,8 +13,11 @@ import android.net.Uri;
 import com.google.android.youtube.player.YouTubeIntents;
 import com.keyes.youtube.OpenYouTubePlayerActivity;
 import android.os.Build;
+import android.util.Log;
 
 public class YoutubeVideoPlayer extends CordovaPlugin {
+
+	private CallbackContext callbackContext;
 
 	@Override
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
@@ -21,20 +25,28 @@ public class YoutubeVideoPlayer extends CordovaPlugin {
 		if(action.equals("openVideo")) {
 			String url = args.getString(0);
         	this.openVideo(url);
+			this.callbackContext = callbackContext;
         	return true;
-        }        
-		
+        }
 		return false;
 	}
-	
-	private void openVideo(String videoId) {
 
+	public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+		if (requestCode == 242) {
+			if (resultCode == this.cordova.getActivity().RESULT_OK) {
+				this.callbackContext.success();
+			} else {
+				this.callbackContext.error("Error");
+			}
+		}
+	}
+
+	private void openVideo(String videoId) {
 		Intent intent = createYoutubeIntent(videoId);
-		cordova.getActivity().startActivity(intent);
+		cordova.startActivityForResult(this, intent, 242);
 	}
 
 	private Intent createYoutubeIntent(String videoId) {
-
 		if (Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP){
 			Intent intent;
 			Context cordovaContext = cordova.getActivity();
@@ -50,7 +62,6 @@ public class YoutubeVideoPlayer extends CordovaPlugin {
 	                ConfigXmlParser parser = new ConfigXmlParser();
 	                parser.parse(cordovaContext);
 	                CordovaPreferences prefs = parser.getPreferences();
-
 	                intent.putExtra("YouTubeApiId", prefs.getString("YouTubeDataApiKey","YOUTUBE_API_KEY"));
 				}
 			}
