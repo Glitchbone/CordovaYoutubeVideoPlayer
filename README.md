@@ -1,4 +1,4 @@
-#Cordova YoutubeVideoPlayer Plugin
+# Cordova YoutubeVideoPlayer Plugin
 
 **Play Youtube Videos in a native Video Player on Android &amp; iOS.**
 
@@ -17,13 +17,13 @@ https://developers.google.com/youtube/android/player/reference/com/google/androi
 Android with YouTube App Version 111662130 requires a workaround to resolve an App issue:
 https://code.google.com/p/gdata-issues/issues/detail?id=8244
 
-##Installation
+## Installation
 
 ```sh
 cordova plugin add https://github.com/JonSmart/CordovaYoutubeVideoPlayer
 ```
 
-##Usage
+## Usage
 
 ```javascript
 YoutubeVideoPlayer.openVideo('YOUTUBE_VIDEO_ID', function(result) { console.log('YoutubeVideoPlayer result = ' + result); });
@@ -40,7 +40,7 @@ with your own YouTube Key.
 
 The callback is called when the video window is closed.  (Work in Progress - should be working for IOS).
 
-##Author
+## Author
 
 **Adrien Glitchbone**
 
@@ -53,7 +53,7 @@ The callback is called when the video window is closed.  (Work in Progress - sho
 **trakout**
 + [https://github.com/trakout](https://github.com/trakout)
 
-##License
+## License
 
 CordovaYoutubeVideoPlayer is available under the MIT license. See the [LICENSE](LICENSE) file for more information.  
 XCDYouTubeKit is available under the MIT license.  
