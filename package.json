@@ -1,19 +1,15 @@
 {
-  "name": "cordova-plugin-youtube-video-player",
-  "version": "1.0.6",
-  "description": "Play Youtube Videos in a native Video Player on Android and iOS.",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/franlindebl/CordovaYoutubeVideoPlayer.git"
-  },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/franlindebl/CordovaYoutubeVideoPlayer/issues"
-  },
-  "homepage": "https://github.com/franlindebl/CordovaYoutubeVideoPlayer#readme"
+	"name": "com.bunkerpalace.cordova.YoutubeVideoPlayer",
+	"version": "1.1",
+	"cordova": {
+		"id": "com.bunkerpalace.cordova.YoutubeVideoPlayer",
+		"platforms": [
+			"android",
+			"ios"
+		]
+	},
+	"engines": {
+		"cordovaDependencies": {
+		}
+	}
 }
