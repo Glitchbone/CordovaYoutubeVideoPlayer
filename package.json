@@ -1,21 +1,8 @@
 {
-  "name": "youtube-video-player",
-  "version": "1.0.0",
-  "description": "Play Youtube Videos in a native Video Player on Android & iOS.",
-  "cordova": {
-    "id": "youtube-video-player",
-    "platforms": [
-      "android",
-      "ios"
-    ]
-  },
-  "engines": {
-    "cordovaDependencies": {
-      "2.0.0": {
-        "cordova": ">100"
-      }
-    }
-  },
+  "name": "cordova-plugin-youtube-video-player",
+  "version": "1.0.6",
+  "description": "Play Youtube Videos in a native Video Player on Android and iOS.",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -23,17 +10,10 @@
     "type": "git",
     "url": "git+https://github.com/franlindebl/CordovaYoutubeVideoPlayer.git"
   },
-  "keywords": [
-    "cordova",
-    "video",
-    "youtube",
-    "player",
-    "fullscreen"
-  ],
-  "author": "Fran Linde Blazquez",
-  "license": "MIT",
+  "author": "",
+  "license": "ISC",
   "bugs": {
-    "url": "https://github.com/franlindebl/CordovaYoutubeVideoPlayer/pulls"
+    "url": "https://github.com/franlindebl/CordovaYoutubeVideoPlayer/issues"
   },
   "homepage": "https://github.com/franlindebl/CordovaYoutubeVideoPlayer#readme"
 }
