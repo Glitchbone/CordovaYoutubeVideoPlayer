@@ -1,15 +1,15 @@
 {
-	"name": "com.bunkerpalace.cordova.YoutubeVideoPlayer",
-	"version": "1.1",
-	"cordova": {
-		"id": "com.bunkerpalace.cordova.YoutubeVideoPlayer",
-		"platforms": [
-			"android",
-			"ios"
-		]
-	},
-	"engines": {
-		"cordovaDependencies": {
-		}
-	}
+    "name": "com.bunkerpalace.cordova.YoutubeVideoPlayer",
+    "version": "1.1",
+    "cordova": {
+        "id": "com.bunkerpalace.cordova.YoutubeVideoPlayer",
+        "platforms": [
+            "android",
+            "ios"
+        ]
+    },
+    "engines": {
+        "cordovaDependencies": {
+        }
+    }
 }
