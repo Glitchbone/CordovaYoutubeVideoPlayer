@@ -7,9 +7,5 @@
             "android",
             "ios"
         ]
-    },
-    "engines": {
-        "cordovaDependencies": {
-        }
     }
 }
