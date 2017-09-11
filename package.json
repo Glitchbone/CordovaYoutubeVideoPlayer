@@ -1,0 +1,31 @@
+{
+    "name": "CordovaYoutubeVideoPlayer",
+    "version": "1.0.1",
+    "description": "Play Youtube Videos in a native Video Player on Android & iOS.",
+    "cordova": {
+        "id": "com.bunkerpalace.cordova.YoutubeVideoPlayer",
+        "platforms": [
+            "ios",
+            "android"
+        ]
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/Glitchbone/CordovaYoutubeVideoPlayer.git"
+    },
+    "keywords": [
+        "video",
+        "youtube",
+        "videoplayer"
+    ],
+    "engines": [{
+        "name": "cordova",
+        "version": ">=3.0.0"
+    }],
+    "author": "Adrien Glitchbone - Bunker Palace SA",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/Glitchbone/CordovaYoutubeVideoPlayer/issues"
+    },
+    "homepage": "https://github.com/Glitchbone/CordovaYoutubeVideoPlayer#readme"
+}
