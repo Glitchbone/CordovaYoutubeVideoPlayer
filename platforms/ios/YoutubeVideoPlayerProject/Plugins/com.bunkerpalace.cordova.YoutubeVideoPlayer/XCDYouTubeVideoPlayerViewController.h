@@ -33,7 +33,7 @@ MP_EXTERN NSString *const XCDYouTubeVideoUserInfoKey;
  *
  *  Use the `presentInView:` method to play a YouTube video inline.
  */
-@interface XCDYouTubeVideoPlayerViewController : MPMoviePlayerViewController
+@interface XCDYouTubeVideoPlayerViewController : AVPlayerViewController
 
 /**
  *  ------------------
